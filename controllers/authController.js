@@ -267,7 +267,8 @@ const login = async (req, res) => {
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true, // JavaScript in the browser can't read it (safer)
-      sameSite: "lax",
+      secure: true, // REQUIRED when sameSite is "none" (works over HTTPS on Render/Netlify)
+      sameSite: "none", // REQUIRED for cross-domain requests (.netlify.app -> .onrender.com)
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
 
@@ -349,7 +350,8 @@ const ResendOtp = async (req, res) => {
 
     await sendMail({
       email: user.email,
-      subject: from === "forgot" ? "Reset Password OTP" : "OTP Verification Mail",
+      subject:
+        from === "forgot" ? "Reset Password OTP" : "OTP Verification Mail",
       otp,
     });
 
