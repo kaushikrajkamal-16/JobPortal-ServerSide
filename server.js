@@ -9,12 +9,10 @@ const cloudinaryconfig = require("./configuration/cloudinary");
 const router = require("./routes");
 
 // Let the React app (Vite, port 5173) call this server and send the cookie
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
-    credentials: true,
-  }),
-);
+const allowedOrigin = (
+  process.env.CLIENT_URL || "http://localhost:5173"
+).replace(/\/+$/, "");
+app.use(cors({ origin: allowedOrigin, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 dbConfig();
